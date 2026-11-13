@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# Outputs & Heatmaps
+outputs/heatmaps/*.jpg
+outputs/reports/*.png
+outputs/reports/*.json
+!outputs/heatmaps/sample_*.jpg
+
+# Large Transformer weights (>100MB exceeds GitHub push limits; downloaded automatically via HuggingFace Hub)
+models/**/*.safetensors
+*.safetensors
+
+# Models (allow deepfake_detector.pth which is ~16MB)
+!models/deepfake_detector.pth
+!models/**/config.json
+!models/**/preprocessor_config.json
+
+# SQLite Database
+backend/database/*.db
+backend/database/*.db-journal
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

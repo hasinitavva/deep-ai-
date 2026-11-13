@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: sentinel-deepfake-detector
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0

@@ -1,0 +1,16 @@
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.gitignore
+.vscode/
+.idea/
+dataset/
+outputs/heatmaps/*.jpg
+outputs/reports/*.png
+*.pdf
+test_tiger.py

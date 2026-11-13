@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTINEL AI — Forensic Deepfake & Synthetic Media Verifier</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Background Ambient Glow Canvas/Grid -->
+    <div class="ambient-grid"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <div class="app-container">
+        <!-- Top Navigation / Brand Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-logo">
+                    <div class="logo-shield">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span class="logo-glow"></span>
+                    </div>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title-wrap">
+                        <h1 class="brand-title">SENTINEL<span class="brand-highlight">.AI</span></h1>
+                        <span class="version-tag">v2.4 PRO</span>
+                    </div>
+                    <p class="brand-subtitle">Multi-Modal Deepfake & Synthetic Media Forensic Verification</p>
+                </div>
+            </div>
+
+            <div class="header-center telemetry-pills">
+                <div class="telemetry-item" title="Active Model for Face Verification">
+                    <span class="dot-indicator green"></span>
+                    <span class="t-label">FACE:</span>
+                    <span class="t-val">ViT-B16 Forensics</span>
+                </div>
+                <div class="telemetry-item" title="Active Model for AI Art & Diffusion">
+                    <span class="dot-indicator blue"></span>
+                    <span class="t-label">GENAI:</span>
+                    <span class="t-val">Swin-Transformer</span>
+                </div>
+                <div class="telemetry-item" title="Frequency Domain Spectral Engine">
+                    <span class="dot-indicator purple"></span>
+                    <span class="t-label">SPECTRAL:</span>
+                    <span class="t-val">2D-FFT Core</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="status-badge-group" id="systemStatus">
+                    <span class="pulse-ring"></span>
+                    <span id="statusText">Engine Ready</span>
+                    <span class="device-chip" id="deviceBadge">CPU</span>
+                </div>
+                <!-- Theme Accent Switcher -->
+                <div class="theme-accent-picker" title="Toggle Accent Glow">
+                    <button type="button" class="accent-btn cyber active" data-accent="cyber" title="Cyber Indigo"></button>
+                    <button type="button" class="accent-btn emerald" data-accent="emerald" title="Matrix Emerald"></button>
+                    <button type="button" class="accent-btn crimson" data-accent="crimson" title="Crimson Alert"></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-layout">
+
+            <!-- Left Panel: Input & Controls -->
+            <section class="panel upload-panel glass-card">
+                <div class="panel-header">
+                    <div class="panel-title-wrap">
+                        <div class="panel-icon"><i class="fa-solid fa-fingerprint"></i></div>
+                        <div>
+                            <h2>Media Inspection</h2>
+                            <p class="panel-desc">Upload suspicious image for neural authentication</p>
+                        </div>
+                    </div>
+                    <span class="step-chip">STEP 01</span>
+                </div>
+
+                <!-- Detection Modes Banner -->
+                <div class="detection-modes-banner">
+                    <div class="mode-chip active"><i class="fa-solid fa-bolt-lightning"></i> Auto-Routing</div>
+                    <div class="mode-chip"><i class="fa-solid fa-user-astronaut"></i> Face Swap</div>
+                    <div class="mode-chip"><i class="fa-solid fa-palette"></i> GenAI Art</div>
+                    <div class="mode-chip"><i class="fa-solid fa-wand-magic-sparkles"></i> Anime</div>
+                </div>
+
+                <!-- Dropzone Area -->
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/bmp" hidden>
+                    <div class="dropzone-content" id="dropzoneContent">
+                        <div class="scanner-crosshair"></div>
+                        <div class="upload-icon-wrapper">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h3>Drop image here to inspect</h3>
+                        <p class="dropzone-hint">or <button type="button" class="btn-link" id="browseBtn">browse files</button> from disk</p>
+                        <div class="file-badges">
+                            <span><i class="fa-regular fa-file-image"></i> JPG, PNG, WEBP, BMP</span>
+                            <span><i class="fa-solid fa-shield-virus"></i> Max 15MB</span>
+                        </div>
+                    </div>
+
+                    <!-- File Preview Area -->
+                    <div class="preview-container hidden" id="previewContainer">
+                        <div class="preview-img-box">
+                            <img id="previewImage" src="" alt="Selected Preview">
+                            <div class="scan-laser"></div>
+                        </div>
+                        <button type="button" class="btn-icon remove-file" id="removeFileBtn" title="Remove file">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="preview-info-card">
+                            <div class="info-item">
+                                <span class="info-label">File:</span>
+                                <span class="info-val" id="fileName">image.jpg</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Size:</span>
+                                <span class="info-val" id="fileSize">0 KB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Samples Selector -->
+                <div class="sample-picker">
+                    <div class="sample-label-row">
+                        <span><i class="fa-solid fa-flask-vial"></i> Load Test Datasets:</span>
+                    </div>
+                    <div class="sample-buttons-grid">
+                        <button type="button" class="btn-sample btn-sample-fake" id="sampleFakeBtn">
+                            <i class="fa-solid fa-user-xmark"></i> Deepfake Face
+                        </button>
+                        <button type="button" class="btn-sample btn-sample-real" id="sampleRealBtn">
+                            <i class="fa-solid fa-user-check"></i> Authentic Face
+                        </button>
+                        <button type="button" class="btn-sample btn-sample-art" id="sampleArtBtn">
+                            <i class="fa-solid fa-dragon"></i> GenAI Art (Tiger)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button type="button" class="btn-primary analyze-cta" id="analyzeBtn" disabled>
+                    <span class="btn-glimmer"></span>
+                    <i class="fa-solid fa-microscope"></i>
+                    <span>Execute Forensic Analysis</span>
+                </button>
+
+                <!-- Processing Progress Indicator -->
+                <div class="progress-box hidden" id="progressBox">
+                    <div class="progress-header">
+                        <div class="progress-spinner-ring"></div>
+                        <span class="progress-step" id="progressStep">Initializing neural pipeline...</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Results & Explainable AI -->
+            <section class="panel results-panel glass-card" id="resultsPanel">
+
+                <!-- Placeholder state when no analysis performed -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-visual">
+                        <div class="radar-scan">
+                            <div class="radar-sweep"></div>
+                        </div>
+                        <i class="fa-solid fa-magnifying-glass-chart empty-icon-center"></i>
+                    </div>
+                    <h3>Awaiting Inspection Target</h3>
+                    <p>Upload a suspicious image or pick a test sample on the left. SENTINEL will run deepfake face inference, GenAI diffusion detection, Grad-CAM feature heatmaps, and 2D Fourier spectral analysis.</p>
+                    <div class="feature-pills">
+                        <span><i class="fa-solid fa-check"></i> Biometric Facial Anomaly</span>
+                        <span><i class="fa-solid fa-check"></i> High-Frequency Grid Noise</span>
+                        <span><i class="fa-solid fa-check"></i> Layer Activation Maps</span>
+                    </div>
+                </div>
+
+                <!-- Active Analysis Results Container -->
+                <div class="results-content hidden" id="resultsContent">
+
+                    <!-- Actions Bar (Export, Copy, New Scan) -->
+                    <div class="results-actions-bar">
+                        <div class="action-bar-left">
+                            <span class="inspection-tag"><i class="fa-solid fa-fingerprint"></i> FORENSIC SCAN REPORT</span>
+                        </div>
+                        <div class="action-bar-right">
+                            <button type="button" class="btn-ghost-sm" id="copyReportBtn" title="Copy report summary to clipboard">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                            <button type="button" class="btn-ghost-sm" id="exportReportBtn" title="Download report as JSON">
+                                <i class="fa-solid fa-download"></i> Export JSON
+                            </button>
+                            <button type="button" class="btn-ghost-sm" id="resetScanBtn" title="Start new scan">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Top Hero Result Card -->
+                    <div class="result-card" id="resultCard">
+                        <div class="result-card-inner">
+                            <div class="result-badge-col">
+                                <div class="verdict-pill-wrap">
+                                    <span class="prediction-tag" id="predictionBadge">AUTHENTIC</span>
+                                </div>
+                                <div class="gauge-container" id="confidenceGauge">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle-fill" id="gaugeFill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage" id="confidencePercentage">0%</text>
+                                    </svg>
+                                    <span class="gauge-sublabel">CONFIDENCE</span>
+                                </div>
+                            </div>
+
+                            <div class="result-details">
+                                <div class="verdict-headline">
+                                    <h3 id="resultTitle">VERDICT: AUTHENTIC</h3>
+                                    <p class="result-subtitle" id="resultSubtitle">Confidence: 99.1% • Neural Model Ensemble</p>
+                                </div>
+
+                                <!-- Probability Spectrum Bars -->
+                                <div class="probability-bars-card">
+                                    <div class="prob-row">
+                                        <div class="prob-meta">
+                                            <span class="prob-label"><i class="fa-solid fa-triangle-exclamation"></i> Synthetic / Manipulated:</span>
+                                            <strong class="prob-num fake" id="probFakeText">0%</strong>
+                                        </div>
+                                        <div class="bar-track"><div class="bar-fill bar-fake" id="barFakeFill" style="width: 0%;"></div></div>
+                                    </div>
+                                    <div class="prob-row">
+                                        <div class="prob-meta">
+                                            <span class="prob-label"><i class="fa-solid fa-circle-check"></i> Authentic / Real:</span>
+                                            <strong class="prob-num real" id="probRealText">0%</strong>
+                                        </div>
+                                        <div class="bar-track"><div class="bar-fill bar-real" id="barRealFill" style="width: 0%;"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explainable AI Evidence Card -->
+                    <div class="card evidence-card">
+                        <div class="card-header">
+                            <div class="card-header-title">
+                                <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Diagnostic Evidence & Forensic Findings</h3>
+                                <p class="card-subhead">Synthesized explanation from Grad-CAM activation, FFT spectral noise, and model certainty</p>
+                            </div>
+                            <span class="badge badge-info" id="evidencePredType">Analysis Findings</span>
+                        </div>
+                        <ul class="evidence-list" id="evidenceList">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Grad-CAM Visualization Section with Interactive View Switcher -->
+                    <div class="card gradcam-card">
+                        <div class="card-header vis-header">
+                            <div>
+                                <h3><i class="fa-solid fa-layer-group"></i> Spatial & Spectral Visual Explanations</h3>
+                                <p class="card-subhead">Convolutional activations superimposed on target input alongside 2D-FFT noise spectrum</p>
+                            </div>
+                            <!-- View Filter Tabs -->
+                            <div class="vis-filter-tabs">
+                                <button type="button" class="vis-tab active" data-view="all">All 4 Views</button>
+                                <button type="button" class="vis-tab" data-view="overlay">Fusion Overlay</button>
+                                <button type="button" class="vis-tab" data-view="fft">FFT Spectral</button>
+                            </div>
+                        </div>
+                        
+                        <div class="visualizer-grid" id="visualizerGrid">
+                            <div class="vis-item" data-type="crop" title="Click to view full screen">
+                                <div class="vis-img-wrapper">
+                                    <img id="visCrop" src="" alt="Cropped Target">
+                                    <div class="vis-hover-overlay"><i class="fa-solid fa-expand"></i> Inspect</div>
+                                </div>
+                                <div class="vis-caption">
+                                    <span class="vis-index">01</span>
+                                    <span class="vis-title">Target Crop Region</span>
+                                </div>
+                            </div>
+
+                            <div class="vis-item" data-type="heatmap" title="Click to view full screen">
+                                <div class="vis-img-wrapper">
+                                    <img id="visHeatmap" src="" alt="Grad-CAM Activation">
+                                    <div class="vis-hover-overlay"><i class="fa-solid fa-expand"></i> Inspect</div>
+                                </div>
+                                <div class="vis-caption">
+                                    <span class="vis-index">02</span>
+                                    <span class="vis-title">Grad-CAM Heatmap</span>
+                                </div>
+                            </div>
+
+                            <div class="vis-item featured" data-type="overlay" title="Click to view full screen">
+                                <div class="vis-featured-badge"><i class="fa-solid fa-star"></i> Primary Evidence</div>
+                                <div class="vis-img-wrapper">
+                                    <img id="visOverlay" src="" alt="Heatmap Overlay">
+                                    <div class="vis-hover-overlay"><i class="fa-solid fa-expand"></i> Inspect</div>
+                                </div>
+                                <div class="vis-caption">
+                                    <span class="vis-index">03</span>
+                                    <span class="vis-title">Superimposed Fusion</span>
+                                </div>
+                            </div>
+
+                            <div class="vis-item" data-type="fft" title="Click to view full screen">
+                                <div class="vis-img-wrapper">
+                                    <img id="visFFT" src="" alt="FFT Frequency Spectrum">
+                                    <div class="vis-hover-overlay"><i class="fa-solid fa-expand"></i> Inspect</div>
+                                </div>
+                                <div class="vis-caption">
+                                    <span class="vis-index">04</span>
+                                    <span class="vis-title">2D FFT Magnitude Spectrum</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Heatmap Intensity Legend -->
+                        <div class="gradcam-legend">
+                            <span class="legend-title"><i class="fa-solid fa-circle-info"></i> Heatmap Activation Scale:</span>
+                            <div class="legend-bar-wrap">
+                                <div class="legend-bar"></div>
+                                <div class="legend-labels">
+                                    <span>Natural (0.0)</span>
+                                    <span>Moderate Artifacts</span>
+                                    <span>Critical Synthetic Feature (1.0)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Analysis Metrics Cards -->
+                    <div class="card tech-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-microchip"></i> Telemetry & Diagnostic Metrics</h3>
+                        </div>
+                        <div class="metrics-grid">
+                            <div class="metric-tile">
+                                <div class="metric-icon"><i class="fa-solid fa-id-badge"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Subject Recognition</span>
+                                    <strong class="metric-value" id="metricFaceConf">95.0%</strong>
+                                </div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-icon"><i class="fa-solid fa-brain"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Ensemble Certainty</span>
+                                    <strong class="metric-value" id="metricModelConf">96.3%</strong>
+                                </div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-icon"><i class="fa-solid fa-wave-square"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">FFT Spectral Anomaly</span>
+                                    <strong class="metric-value" id="metricFreqScore">78.4%</strong>
+                                </div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Dominant Activation Region</span>
+                                    <strong class="metric-value" id="metricRegion">Facial Boundary</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <!-- Prediction History Table -->
+        <section class="panel history-panel glass-card">
+            <div class="panel-header history-header">
+                <div class="history-title-wrap">
+                    <div class="panel-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div>
+                        <h2>Inspection Audit Logs</h2>
+                        <p class="panel-desc">Persistent SQLite record of verified media scans</p>
+                    </div>
+                </div>
+
+                <div class="history-controls">
+                    <!-- Search Filter Box -->
+                    <div class="search-input-wrap">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="historySearchInput" placeholder="Filter by filename or verdict..." class="search-input">
+                    </div>
+                    <button type="button" class="btn-secondary btn-sm" id="exportHistoryBtn" title="Export logs as JSON">
+                        <i class="fa-solid fa-file-export"></i> Export
+                    </button>
+                    <button type="button" class="btn-secondary btn-sm" id="refreshHistoryBtn" title="Reload SQLite database">
+                        <i class="fa-solid fa-rotate-right"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Scan Time</th>
+                            <th>Media Identifier</th>
+                            <th>Forensic Verdict</th>
+                            <th>Certainty</th>
+                            <th>Objects</th>
+                            <th>Dominant Region</th>
+                            <th>Spectral Score</th>
+                            <th>Visual Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center">No past prediction history recorded yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-brand"><i class="fa-solid fa-shield-halved"></i> SENTINEL AI FORENSICS</span>
+                    <span class="footer-divider">•</span>
+                    <span>Multi-Modal Synthetics Detection Suite</span>
+                </div>
+                <div class="footer-right">
+                    <span>Powered by PyTorch • ViT-B16 • Swin-Transformer • Grad-CAM • OpenCV 2D-FFT</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Image Lightbox Modal for Inspection -->
+    <div class="modal-backdrop hidden" id="imageModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Visual Inspection</h3>
+                <button type="button" class="btn-icon" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImg" src="" alt="Enlarged Visual">
+            </div>
+            <div class="modal-footer">
+                <a id="modalDownloadBtn" href="#" target="_blank" download class="btn-secondary btn-sm">
+                    <i class="fa-solid fa-download"></i> Download Full Image
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

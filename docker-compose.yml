@@ -1,0 +1,15 @@
+services:
+  sentinel-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentinel-deepfake-detector
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+    volumes:
+      - ./outputs:/app/outputs
+      - ./backend/database:/app/backend/database
+    restart: unless-stopped
